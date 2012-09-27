@@ -1,0 +1,6 @@
+name = "Field Collection Bulk Upload"
+description = "Provides bulk upload for image fields located inside field collections.  Particularly intended to allow for easier gallery creation."
+core = 7.x
+
+dependencies[] = field_collection
+dependencies[] = plupload
