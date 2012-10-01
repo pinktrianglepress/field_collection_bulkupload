@@ -143,8 +143,9 @@ function field_collection_bulkupload_element_value($element, $input = FALSE, &$f
 
   // find the validators
   $field_element = $items[$upload_delta][$field_name];
-  $upload_location = isset($field_element[$upload_delta]['#upload_location']) ? $field_element[$upload_delta]['#upload_location'] : file_default_scheme() . '://';
-  $upload_validators = isset($field_element[$upload_delta]['#upload_validators']) ? $field_element[$upload_delta]['#upload_validators'] : array();
+  $cur_item = $field_element[$langcode][$upload_delta];
+  $upload_location = isset($cur_item['#upload_location']) ? $cur_item['#upload_location'] : file_default_scheme() . '://';
+  $upload_validators = isset($cur_item['#upload_validators']) ? $cur_item['#upload_validators'] : array();
 
   // A URI may already have a trailing slash or look like "public://".
   if (drupal_substr($upload_location, -1) != '/') {
@@ -163,6 +164,7 @@ function field_collection_bulkupload_element_value($element, $input = FALSE, &$f
     if ($uploaded_file['status'] == 'done') {
       $source = $uploaded_file['tmppath'];
       $extensions = !empty($upload_validators['file_validate_extensions'][0]) ? $upload_validators['file_validate_extensions'][0] : array();
+
       $filename = field_collection_bulkupload_clean_filename($uploaded_file['name'], $extensions);
       // Move the file to a temporary destination using final base file name.
       $temp_destination = file_stream_wrapper_uri_normalize('temporary://' . $filename);
@@ -251,7 +253,7 @@ function field_collection_bulkupload_submit(&$form, &$form_state) {
     // Clear out input as it will need to be rebuildt.
     drupal_array_set_nested_value($form_state['input'], $parents, NULL);
   }
-
+  drupal_set_message(t('Files added, you may now fill out other data for each item.'));
   $form_state['rebuild'] = TRUE;
 }
 
@@ -277,7 +279,7 @@ function field_collection_bulkupload_get_imagefield($bundle) {
 function field_collection_bulkupload_get_imagefields() {
   $imagefields = &drupal_static('field_collection_bulkupload_imagefields');
   if (!$imagefields) {
-    $imagefields = field_read_fields(array('type' => 'image'));
+    $imagefields = field_read_fields(array('type' => array('image', 'file')));
   }
   return $imagefields;
 }
