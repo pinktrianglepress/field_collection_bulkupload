@@ -143,7 +143,7 @@ function field_collection_bulkupload_element_value($element, $input = FALSE, &$f
 
   // find the validators
   $field_element = $items[$upload_delta][$field_name];
-  $cur_item = $field_element[$langcode][$upload_delta];
+  $cur_item = isset($field_element[$langcode][$upload_delta]) ? $field_element[$langcode][$upload_delta] : array();
   $upload_location = isset($cur_item['#upload_location']) ? $cur_item['#upload_location'] : file_default_scheme() . '://';
   $upload_validators = isset($cur_item['#upload_validators']) ? $cur_item['#upload_validators'] : array();
 
