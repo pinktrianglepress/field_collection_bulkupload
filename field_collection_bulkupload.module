@@ -196,13 +196,13 @@ function field_collection_bulkupload_element_value($element, $input = FALSE, &$f
     // Update form_state values.
     drupal_array_set_nested_value($form_state['values'], $path, $field_values[$upload_delta]);
 
+    //Update the field collection
+    $col = field_form_get_state($coll_parents, $coll_field, $langcode, $form_state);
+    $col['items_count'] = isset($col['items_count']) ? $col['items_count']+1 : 1;
+    field_form_set_state($coll_parents, $coll_field, $langcode, $form_state, $col);
+
     $upload_delta++;
   }
-  
-  //Update the field collection
-  $col = field_form_get_state($coll_parents, $coll_field, $langcode, $form_state);
-  $col['items_count'] = $upload_delta;
-  field_form_set_state($coll_parents, $coll_field, $langcode, $form_state, $col);
 
   return $pud_value;
 }
@@ -257,11 +257,6 @@ function field_collection_bulkupload_submit(&$form, &$form_state) {
     // Clear out input as it will need to be rebuildt.
     drupal_array_set_nested_value($form_state['input'], $parents, NULL);
   }
-
-  if($form_state['field'][$field][$langcode]['items_count'] != $field_item_count){
-    $form_state['field'][$field][$langcode]['items_count'] = $field_item_count;
-  }
-
   drupal_set_message(t('Files added, you may now fill out other data for each item.'));
   $form_state['rebuild'] = TRUE;
 }
