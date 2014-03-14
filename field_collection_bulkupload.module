@@ -139,11 +139,12 @@ function field_collection_bulkupload_element_value($element, $input = FALSE, &$f
   $field_parents[] = $langcode;
   $items = $collection[$langcode];
 
-  $upload_delta = empty($items['#max_delta']) ? 0 : $items['#max_delta'];
+  $upload_delta = empty($items['#max_delta']) ? 0 : $items['#max_delta'] + 1;
+  $upload_delta_cur = empty($items['#max_delta']) ? 0 : $items['#max_delta'];
 
   // find the validators
-  $field_element = $items[$upload_delta][$field_name];
-  $cur_item = isset($field_element[$langcode][$upload_delta]) ? $field_element[$langcode][$upload_delta] : array();
+  $field_element = $items[$upload_delta_cur][$field_name];
+  $cur_item = isset($field_element[$langcode][$upload_delta_cur]) ? $field_element[$langcode][$upload_delta_cur] : array();
   $upload_location = isset($cur_item['#upload_location']) ? $cur_item['#upload_location'] : file_default_scheme() . '://';
   $upload_validators = isset($cur_item['#upload_validators']) ? $cur_item['#upload_validators'] : array();
 
