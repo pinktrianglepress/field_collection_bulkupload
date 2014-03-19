@@ -224,7 +224,7 @@ function field_collection_bulkupload_submit(&$form, &$form_state) {
 
   $field_values = $field_values[$langcode];
   $instance = field_collection_bulkupload_get_imagefield($col['instance']['field_name']);
-//  $field_item_count= 0;
+  $field_item_count= 0;
 
   foreach ($field_values as $delta => $value) {
     if (!is_numeric($delta)) {
@@ -257,13 +257,13 @@ function field_collection_bulkupload_submit(&$form, &$form_state) {
 
     // Clear out input as it will need to be rebuildt.
     drupal_array_set_nested_value($form_state['input'], $parents, NULL);
-//    $field_item_count++;
+    $field_item_count++;
   }
 
   //Get rid of the empty item
-//  if($form_state['field'][$field][$langcode]['items_count'] != $field_item_count){
-//    $form_state['field'][$field][$langcode]['items_count'] = $field_item_count;
-//  }
+  if($form_state['field'][$field][$langcode]['items_count'] != $field_item_count){
+    $form_state['field'][$field][$langcode]['items_count'] = $field_item_count;
+  }
 
   drupal_set_message(t('Files added, you may now fill out other data for each item.'));
   $form_state['rebuild'] = TRUE;
