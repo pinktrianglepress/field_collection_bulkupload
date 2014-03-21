@@ -49,6 +49,12 @@ function field_collection_bulkupload_add_form(&$element, $name, $language, $buil
   if ($instance) {
     $max_filesize = !empty($instance['settings']['max_filesize']) ? parse_size($instance['settings']['max_filesize']) : parse_size(file_upload_max_size());
     $id = 'edit-' . str_replace('_', '-', $instance['field_name']);
+    
+    $uniqueId = substr($element[$language]['#prefix'], -5, 3);
+    $wrapper = 'edit-' . str_replace('_', '-', $name);
+    if(substr($uniqueId, 0, 2) == '--'){
+      $wrapper = 'edit-' . str_replace('_', '-', $name) . $uniqueId;
+    }
 
     $element['field_collection_bulkupload'] = array(
       '#weight' => -100,
@@ -84,7 +90,7 @@ function field_collection_bulkupload_add_form(&$element, $name, $language, $buil
       ),
       '#ajax' => array(
         'path' => '', //updated in process when we have all the data
-        'wrapper' => 'edit-' . str_replace('_', '-', $name),
+        'wrapper' => $wrapper,
         'method' => 'replace',
         'effect' => 'fade',
         'event' => 'fbc_pud_update',
